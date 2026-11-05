@@ -39,7 +39,7 @@ def minimax_cutoff_search(game, state, d=3, eval_fn=None):
 def alpha_beta_cutoff_search(game, state, d=4, eval_fn=None):
     """Search game to determine best action; use alpha-beta pruning.
     This version cuts off search and uses an evaluation function.
-    Return the action and number of nodes expanded.""
+    Return the action and number of nodes expanded."""
 
     player = game.to_move(state)
     expanded_nodes = 0
