@@ -1,0 +1,143 @@
+[
+    {
+        "id":"0",
+        "name":"Dummy",
+        "hp":100,
+        "intent_sq":[
+            {"type":"block", "value":0}
+        ],
+        "die_after_turn": 10
+    },
+    {
+        "id": "1",
+        "name":"Small Slime A",
+        "hp": 13,
+        "intent_sq":[
+            [{"type": "debuff", "name": "Weak", "duration": 2}],
+            [{"type": "attack", "value": 10}]
+        ]
+    },
+    {
+        "id":"2",
+        "name":"Small Slime S",
+        "hp":15,
+        "intent_sq":[
+            [{"type":"attack", "value":6}]
+        ]
+    },
+    {
+        "id": "3",
+        "name":"Middle Slime A",
+        "hp": 34,
+        "intent_sq":[
+            [
+                {"type":"attack", "value":8},
+                {"type":"insert_card", "card_id":"96", "amount":1, "destination":"discard"}
+            ],
+            [{"type":"debuff", "name":"Weak", "duration":2}],
+            [{"type": "attack", "value": 12}]
+        ]
+    },
+    {
+        "id": "4",
+        "name": "Large Slime A",
+        "hp": 72,
+        "buffs": {
+            "Split": {"value": 1}
+        },
+        "intent_sq":[
+           [
+            {"type":"insert_card", "card_id":"96", "amount":2, "destination":"discard"},
+            {"type":"attack", "value":12}
+           ],
+           [{"type":"attack", "value":18}],
+           [{"type":"debuff", "name":"Weak", "duration":2}]
+        ]
+    },
+    {
+        "id":"5",
+        "name": "Spheric Guardian",
+        "hp":20,
+        "block":40,
+        "buffs":{
+            "Artifact":{"value":3},
+            "Barricade":{"value":1}
+        },
+        "intent_sq":[
+            [{"type":"block", "value":25, "target_selector":"self"}],
+            [
+                {"type":"attack", "value":11},
+                {"type":"debuff", "name":"Frail", "duration":5}
+            ],
+            [
+                {"type":"attack", "value":11},
+                {"type":"attack", "value":11}
+            ],
+            [
+                {"type":"attack", "value":11},
+                {"type":"block", "value":15, "target_selector":"self"}
+            ]
+        ]
+    },
+    {
+        "id":"6",
+        "name":"Cultist",
+        "hp":56,
+        "intent_sq":[
+            [{"type":"buff", "name":"Strength", "value":4, "target_selector":"self"}],
+            [{"type":"attack", "value":6}]
+        ]
+    },
+    {
+        "id":"7",
+        "name":"Orb Walker",
+        "hp":96,
+        "buffs":{
+            "GainStrength":{"value":3}
+        },
+        "intent_sq":[
+            [
+                {"type":"attack", "value":11},
+                {"type":"insert_card", "card_id":"98", "amount":1, "destination":"discard"},
+                {"type":"insert_card", "card_id":"98", "amount":1, "destination":"draw"}
+            ],
+            [{"type":"attack", "value":16}]
+        ]
+    },
+    {
+        "id":"8",
+        "name":"Blue Slaver",
+        "hp":50,
+        "intent_sq":[
+            [{"type":"attack", "value":12}],
+            [
+                {"type":"attack", "value":7},
+                {"type":"debuff", "name":"Weak", "duration":2}
+            ]
+        ]
+    },
+    {
+        "id":"9",
+        "name":"Red Slaver",
+        "hp":50,
+        "intent_sq":[
+            [{"type":"attack", "value":13}],
+            [
+                {"type":"attack", "value":8},
+                {"type":"debuff", "name":"Vulnerable", "duration":2}
+            ],
+            [{"type":"debuff", "name":"Entangled", "duration":1}]
+        ]
+    },
+    {
+        "id":"10",
+        "name":"Taskmaster",
+        "hp":60,
+        "intent_sq":[
+            [
+                {"type":"attack","value":7},
+                {"type":"insert_card", "card_id":"97","amount":2, "destination":"discard"}
+            ]
+        ]
+    }
+]

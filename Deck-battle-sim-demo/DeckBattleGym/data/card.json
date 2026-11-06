@@ -1,0 +1,516 @@
+[
+    {
+        "id": "1",
+        "name": "Strike",
+        "rarity": "basic",
+        "cost": 1,
+        "card_type": "attack",
+        "target_selector": "single_enemy",
+        "effects": [
+            { "effect": "attack", "value": 6}
+        ]
+    },
+    {
+        "id": "2",
+        "name": "Block",
+        "rarity": "basic",
+        "cost": 1,
+        "card_type": "skill",
+        "target_selector": "self",
+        "effects":[
+            {"effect": "block", "value": 5}
+        ]
+    },
+    {
+        "id":"3",
+        "name":"Bash",
+        "rarity": "basic",
+        "cost": 2,
+        "card_type": "attack",
+        "target_selector": "single_enemy",
+        "effects": [
+            {"effect": "attack", "value": 8},
+            {"effect": "debuff", "name": "Vulnerable", "duration": 2}
+        ]
+    },
+    {
+        "id": "4",
+        "name": "Inflame+",
+        "rarity": "common",
+        "cost": 1,
+        "card_type": "power",
+        "target_selector":"self",
+        "effects":[
+            {"effect": "buff", "name": "Strength", "value": 3}
+        ]
+    },
+    {
+        "id": "5",
+        "name": "Cleave",
+        "rarity": "common",
+        "cost": 1,
+        "card_type":"attack",
+        "target_selector": "all_enemies",
+        "effects":[
+            {"effect": "attack", "value": 8}
+        ]
+    },
+    {
+        "id": "6",
+        "name": "Iron Wave",
+        "rarity": "common",
+        "cost": 1,
+        "card_type": "attack",
+        "target_selector": "single_enemy",
+        "effects":[
+            {"effect":"attack", "value": 5},
+            {"effect":"block", "value":5}
+        ]
+    },
+    {
+        "id": "7",
+        "name": "Twin Strike",
+        "rarity": "common",
+        "cost": 1,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value": 7},
+            {"effect":"attack", "value": 7}
+        ]
+    },
+    {
+        "id": "8",
+        "name": "Pommel Strike+",
+        "rarity": "common",
+        "cost":1,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value": 10},
+            {"effect": "draw", "value": 2}
+        ]
+    },
+    {
+        "id":"9",
+        "name": "Shrug it off+",
+        "rarity":"common",
+        "cost":1,
+        "card_type":"skill",
+        "target_selector": "self",
+        "effects":[
+            {"effect":"block", "value":11},
+            {"effect":"draw", "value":1}
+        ]
+    },
+    {
+        "id":"10",
+        "name": "Carnage",
+        "rarity":"rare",
+        "cost":2,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value":20}
+        ],
+        "ethereal":true
+    },
+    {
+        "id":"11",
+        "name":"Seeing Red+",
+        "rarity":"rare",
+        "cost":0,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"energy", "value":2}
+        ],
+        "exhaust":true
+    },
+    {
+        "id":"12",
+        "name": "Shock Wave",
+        "rarity": "rare",
+        "cost":2,
+        "card_type": "skill",
+        "target_selector":"all_enemies",
+        "effects":[
+            {"effect":"debuff", "name":"Vulnerable", "duration":3},
+            {"effect":"debuff", "name":"Weak", "duration":3}
+        ],
+        "exhaust":true
+    },
+    {
+        "id":"13",
+        "name":"Clothesline",
+        "rarity":"common",
+        "cost":2,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value":12},
+            {"effect":"debuff", "name":"Weak", "duration":2}
+        ]
+    },
+    {
+        "id":"14",
+        "name":"Demon Form",
+        "rarity":"super_rare",
+        "cost":3,
+        "card_type":"power",
+        "target_selector": "self",
+        "effects":[
+            {"effect":"buff", "name":"StrengthGain", "value":2}
+        ]
+    },
+    {
+        "id":"15",
+        "name":"Flex",
+        "rarity":"common",
+        "cost":0,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"buff", "name":"Strength", "value":2},
+            {"effect":"debuff", "name":"LoseStrength", "value":2, "duration":1}
+        ]
+    },
+    {
+        "id":"16",
+        "name":"Bloodletting+",
+        "rarity":"rare",
+        "cost":0,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"energy", "value":3},
+            {"effect": "hp", "value":-3}
+        ]
+    },
+    {
+        "id":"17",
+        "name":"Entrench+",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"double_block"}
+        ]
+    },
+    {
+        "id":"18",
+        "name":"Ghostly Armor",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"block", "value":10}
+        ],
+        "ethereal":true
+    },
+    {
+        "id":"19",
+        "name":"Barricade+",
+        "rarity":"super_rare",
+        "cost":2,
+        "card_type":"power",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"power", "name":"Barricade", "value":1}
+        ]
+    },
+    {
+        "id":"20",
+        "name":"Battle Trance+",
+        "rarity":"rare",
+        "cost":0,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"draw", "value":4},
+            {"effect":"debuff","name":"NoDraw", "duration":1}
+        ]
+    },
+    {
+        "id":"21",
+        "name":"Second Wind",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"exhaust_by_type", "block_per_card":5, "exclude_types":["attack"]}
+        ]
+    },
+    {
+        "id":"22",
+        "name": "Sever Soul",
+        "rarity":"rare",
+        "cost":2,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"exhaust_by_type", "exclude_types":["attack"]},
+            {"effect":"attack", "value":16}
+        ]
+    },
+    {
+        "id":"23",
+        "name":"Fiend Fire",
+        "rarity":"super_rare",
+        "cost":2,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"exhaust_by_type", "attack_per_card":7, "exclude_types":[]}
+        ],
+        "exhaust":true
+    },
+    {
+        "id":"24",
+        "name":"Impervious",
+        "rarity":"super_rare",
+        "cost":2,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"block", "value":30}
+        ],
+        "exhaust":true
+    },
+    {
+        "id": "99",
+        "name": "Dazed",
+        "cost": -1,
+        "card_type": "status",
+        "target_selector": "self",
+        "playable": false,
+        "effects": [],
+        "ethereal":true
+    },
+    {
+        "id": "98",
+        "name": "Burn",
+        "cost": -1,
+        "card_type": "status",
+        "target_selector": "self",
+        "playable": false,
+        "effects": []
+    },
+    {
+        "id":"97",
+        "name": "Wound",
+        "cost":-1,
+        "card_type":"status",
+        "target_selector":"self",
+        "playable":false,
+        "effects":[]
+    },
+    {
+        "id":"96",
+        "name":"Slimed",
+        "cost":1,
+        "card_type":"status",
+        "target_selector":"self",
+        "effects":[],
+        "exhaust":true
+    },
+    {
+        "id":"25",
+        "name":"Hemokinesis",
+        "rarity":"rare",
+        "cost": 1,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value":15},
+            {"effect":"hp", "value":-2}
+        ]
+    },
+    {
+        "id":"26",
+        "name":"Power Through",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"block", "value":15},
+            {"effect":"generate_card", "card_id":"97", "amount":2, "destination":"hand"}
+        ]
+    },
+    {
+        "id":"27",
+        "name":"Wild Strike",
+        "rarity":"common",
+        "cost":1,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value":12},
+            {"effect":"generate_card", "card_id":"97", "amount":1, "destination":"draw"}
+        ]
+    },
+    {
+        "id":"28",
+        "name":"Reckless Damage",
+        "rarity":"rare",
+        "cost":0,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value":7},
+            {"effect":"generate_card", "card_id":"99", "amount":1, "destination":"draw"}
+        ]
+    },
+    {
+        "id":"29",
+        "name":"Immolate",
+        "rarity":"super_rare",
+        "cost":2,
+        "card_type":"attack",
+        "target_selector":"all_enemies",
+        "effects":[
+            {"effect":"attack", "value":21},
+            {"effect":"generate_card", "card_id":"98", "amount":1, "destination":"discard"}
+        ]
+    },
+    {
+        "id":"30",
+        "name":"Reaper",
+        "rarity":"super_rare",
+        "cost":2,
+        "card_type":"attack",
+        "target_selector":"all_enemies",
+        "effects":[
+            {"effect":"reaper", "ratio":1.0, "attack":4}
+        ],
+        "exhaust":true
+    },
+    {
+        "id":"31",
+        "name":"Offering",
+        "rarity":"super_rare",
+        "cost":0,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"hp", "value":-6},
+            {"effect":"energy", "value":2},
+            {"effect":"draw", "value":3}
+        ],
+        "exhaust":true
+    },
+    {
+        "id":"32",
+        "name":"Limit Break+",
+        "rarity":"super_rare",
+        "cost":1,
+        "card_type":"skill",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"double_strength"}
+        ]
+    },
+    {
+        "id":"33",
+        "name":"Rupture+",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"power",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"power", "name":"Rupture", "value":2}
+        ]
+    },
+    {
+        "id":"34",
+        "name":"Evolve+",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"power",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"power", "name":"Evolve", "value":2}
+        ]
+    },
+    {
+        "id":"35",
+        "name": "Fire Breathing",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"power",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"power", "name":"FireBreath", "value":6}
+        ]
+    },
+    {
+        "id":"36",
+        "name":"Feel No Pain",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"power",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"power","name": "GainBlockOnExhaust", "value": 3}
+        ]
+    },
+    {
+        "id":"37",
+        "name":"Dark Embrace+",
+        "rarity":"rare",
+        "cost":1,
+        "card_type":"power",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"power", "name":"DrawOnExhaust", "value":1}
+        ]
+    },
+    {
+        "id":"38",
+        "name":"Brutality",
+        "rarity":"super_rare",
+        "cost":0,
+        "card_type":"power",
+        "target_selector":"self",
+        "effects":[
+            {"effect":"power", "name":"Brutality", "value":1}
+        ]
+    },
+    {
+        "id":"39",
+        "name":"Body Slam+",
+        "rarity":"common",
+        "cost":0,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"block_attack"}
+        ]
+    },
+    {
+        "id":"40",
+        "name":"Bludgeon",
+        "rarity":"super_rare",
+        "cost":3,
+        "card_type":"attack",
+        "target_selector":"single_enemy",
+        "effects":[
+            {"effect":"attack", "value":32}
+        ]
+    },
+    {
+        "id":"41",
+        "name":"Whirlwind",
+        "rarity":"rare",
+        "cost":"x",
+        "card_type":"attack",
+        "target_selector":"all_enemies",
+        "effects":[
+            {"effect":"x_attack", "value":5}
+        ]
+        }
+]
