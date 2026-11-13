@@ -229,6 +229,7 @@ class Battle:
                 + self.used_powers + self.picked_card + self.original_deck):
             memo[id(c)] = c
         memo[id(self._card_templates)] = self._card_templates    
+        memo[id(self.player.strategy)] = self.player.strategy
         for e in self.enemies:
             memo[id(e.intent_sq)] = e.intent_sq        
         b = copy.deepcopy(self, memo)

@@ -10,15 +10,16 @@ class Node:
         self.key = key
         self.children = {}
         self.visits = 0 
-        value = 0.0 
+        self.value = 0.0 
 
 class MCTS:
-    def __init__(self, iterations=300, c=0.7, max_rollout_turns=15, max_rollout_steps=400, seed=0):
+    def __init__(self, iterations=300, c=0.7, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None):
         self.iterations = iterations
         self.c = c 
         self.max_rollout_turns = max_rollout_turns
         self.max_rollout_steps = max_rollout_steps
         self.rng = random.Random(seed)
+        self.rollout_policy = rollout_policy
 
     @staticmethod
     def action_map(s):
@@ -30,9 +31,8 @@ class MCTS:
                 m[END] = action 
             else:
                 m[("play", s.hand[action[1]].id, action[2])] = action 
-        return action 
+        return m
 
-    @staticmethod
     def ucb(self, parent, child):
         # selection algorithm based on balancing visiting new nodes while also exploring promising nodes 
         if child.visits == 0:
@@ -46,19 +46,25 @@ class MCTS:
         # highest score if win 
         if win:
             return 0.5 + 0.5 * hp_percent
-        if s.player.hp <= 0:
-            return 0.0
         total = sum(e.max_hp for e in s.enemies) or 1 
         left = sum(max(0, e.hp) for e in s.enemies)
+        progress = 1 - left / total
+        lost = 1 - max(0, hp_percent)                    
+        net = progress - lost
         # give a higher score the lower the enemy is and the higher you are 
-        return 0.4 * (1 - left / total) + 0.1 * hp_percent
+        return 0.45 * (0.5 + 0.5 * net)
 
     def rollout(self, s): 
         # pick what actions to move forward 
-        start_turn, steps = s.turn(), 0 
+        start_turn, steps = s.turn, 0 
         while (not s.is_terminal() and steps < self.max_rollout_steps and s.turn - start_turn < self.max_rollout_turns):
-            plays = [action for action in s.legal_actions() if action[0] == "play"]
-            s.apply(s.rng.choice(plays) if plays else END)
+            # strategy for what to do 
+            if self.rollout_policy:
+                action = self.rollout_policy(s)
+            else:
+                plays = [action for action in s.legal_actions() if action[0] == "play"]
+                action = s.rng.choice(plays) if plays else END
+            s.apply(action)
             steps += 1 
         return self.evaluate(s)
 
@@ -106,10 +112,10 @@ class MCTS:
         best = max(root.children, key=lambda k: root.children[k].visits)
         return actions[best]
 
-    def play_battle(battle, iterations=300, seed=0):
-        battle.start()
-        mcts = MCTS(iterations=iterations, seed=seed)
-        while not battle.is_terminal():
-            battle.apply(mcts.search(battle))
-        win, hp_percent = battle.result()
-        return {"win": win, "final_hp": battle.player.hp, "turns": battle.turn}
+def play_battle(battle, iterations=300, seed=0, **kw):
+    battle.start()
+    mcts = MCTS(iterations=iterations, seed=seed, **kw)
+    while not battle.is_terminal():
+        battle.apply(mcts.search(battle))
+    win, hp_percent = battle.result()
+    return {"win": win, "final_hp": battle.player.hp, "turns": battle.turn}

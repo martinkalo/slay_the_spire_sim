@@ -1,88 +1,24 @@
 import random
 from DeckBattleGym.envs.effectcalculator import EffectCalculator
 from DeckBattleGym.envs.enemy import AttackIntent, BlockIntent
+from DeckBattleGym.envs.card import AttackEffect, BlockEffect
+from DeckBattleGym.sim.mcts import MCTS
+from DeckBattleGym.sim.mcts import MCTS, END
 
-class MinimaxStrategy:
+class MCTSStrategy:
+    def __init__(self, iterations=200, seed=0, **kw):
+        self.mcts = MCTS(iterations=iterations, seed=seed, **kw)
+        self._target = None
+
     def select_card(self, hand, player, enemies, battle):
-        # assuming only 1 enemy for now
-        percentages = []
-        player_score = 0
-        enemy_score = 0
-        seen = []
-        playable = []
-        best_combo = []
-        best_score_diff = 0
-        total_dmg = 0
-        total_block = 0
-        
-        # LOOKING AT ENEMIES
-        # no need to update index, idx will be ported on the next iteration and enemy updates intent when the turn actually plays out
-        current_intent = enemies.intent_sq[self.intent_index % len(self.intent_sq)]
-        
-        if current_intent == AttackIntent:
-            incoming_damage = current_intent.execute(battle)
-            # if the enemy has weak, incoming_damage *= 0.75
-            start_health = player.hp
-            after_damage = max(0, start_health - incoming_damage)
-            before_damage_percent = start_health / player.max_hp # proportion of max health before taking damage
-            after_damage_percent = after_damage / player.max_hp # proportion of max health after taking damage
-            
-            player_score -= before_damage_percent - after_damage_percent # negative number for player
-            
-        elif current_intent == BlockIntent:
-            enemy_score += current_intent.execute(battle)
-            
-        #LOOKING AT OUR CARDS
-        
-        # uniform cost search 
+        a = self.mcts.search(battle)               
+        if a[0] == "end":
+            return None
+        self._target = a[2]
+        return battle.hand[a[1]]
 
-        # once a node is unexpandable, 
-        seen.append(playable)
-
-        for combo in seen:
-            for card in combo:
-                total_dmg += card.damage #this isn't correct with the current json but the actual good one from the API has damage and block as attributes
-                # if it applies vulnerable, total_dmg * 1.5
-                if card.block is not None:
-                    total_block += card.block #same here
-                # if it applies weak, total_block * 1.3
-
-        enemy_current_health = enemies.health / enemies.max_hp
-        enemy_after_damage = (enemies.health - total_dmg) / enemies.max_hp
-
-        enemy_score -= enemy_current_health - enemy_after_damage
-        player_score += total_block
-
-        score_difference = player_score - enemy_score
-
-        if score_difference > best_diff:
-            best_combo = combo
-            best_diff = score_difference
-            
-        return best_combo
-    
-    # this returns a combo, but we eventually want to return just 1 card at a time to determine playing order.
-    
     def select_target(self, card, player, enemies, battle):
-        sel = card.target_selector
-        alive = [e for e in enemies if e.hp > 0]
-        
-        if sel == "all_enemies":
-            return alive
-        elif sel == "random_enemy":
-            return [random.choice(alive)] if alive else []
-        elif sel == "lowest_hp":
-                return [min(alive, key=lambda e: e.hp)] if alive else []
-        elif sel == "single_enemy":
-            target = next((e for e in alive), None)
-            return [target] if target else []
-        elif sel == "self":
-                return [player]
-        else:
-                raise ValueError(f"Unknown target_selector: {sel}")
-        
-        
-                
+        return battle._resolve_targets(card, self._target)    
 
 class SimpleStrategy:
     def select_card(self, hand, player, enemies, battle):
