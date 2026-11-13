@@ -1,0 +1,64 @@
+deck,group,hp,win_random,win_mcts_rand,win_mcts_heur,hp_random,hp_mcts_rand,hp_mcts_heur,note
+deck01,group00,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck01,group000,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck01,group01,80,1.0,1.0,1.0,53.1,68.2,70.8,both win; HP only
+deck01,group02,80,1.0,1.0,1.0,25.7,45.6,51.4,both win; HP only
+deck01,group03,80,0.0,0.0,0.367,0.0,0.0,2.1,informative
+deck01,group04,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck01,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck01,group06,80,0.0,0.767,0.933,0.0,8.4,9.4,informative
+deck01,group07,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck02,group00,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck02,group000,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck02,group01,80,1.0,1.0,1.0,63.9,74.0,73.3,both win; HP only
+deck02,group02,80,1.0,1.0,1.0,48.4,66.5,66.5,both win; HP only
+deck02,group03,80,0.867,1.0,1.0,25.4,51.6,55.0,both win; HP only
+deck02,group04,80,0.1,1.0,1.0,1.5,34.9,36.8,both win; HP only
+deck02,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck02,group06,80,0.733,1.0,1.0,22.5,53.2,52.8,both win; HP only
+deck02,group07,80,0.0,0.5,0.767,0.0,6.1,8.2,informative
+deck03,group00,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck03,group000,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck03,group01,80,1.0,1.0,1.0,52.7,73.5,74.8,both win; HP only
+deck03,group02,80,0.967,1.0,1.0,45.1,66.4,65.1,both win; HP only
+deck03,group03,80,0.167,1.0,0.967,10.0,63.3,61.4,informative
+deck03,group04,80,0.1,0.933,0.967,6.7,48.9,52.2,informative
+deck03,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck03,group06,80,0.167,0.933,1.0,4.1,33.5,37.4,informative
+deck03,group07,80,0.0,0.1,0.067,0.0,1.8,2.2,informative
+deck04,group00,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck04,group000,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck04,group01,80,1.0,1.0,1.0,64.3,77.0,78.3,both win; HP only
+deck04,group02,80,1.0,1.0,1.0,53.8,73.7,76.2,both win; HP only
+deck04,group03,80,0.467,1.0,1.0,19.1,66.6,73.1,both win; HP only
+deck04,group04,80,0.1,0.967,1.0,2.0,48.8,60.0,informative
+deck04,group05,80,0.0,0.733,0.767,0.0,22.6,24.1,informative
+deck04,group06,80,0.3,1.0,1.0,6.5,52.0,53.2,both win; HP only
+deck04,group07,80,0.333,1.0,1.0,6.8,42.5,40.8,both win; HP only
+deck05,group00,80,1.0,1.0,1.0,68.0,68.0,68.0,both win; HP only
+deck05,group000,80,1.0,1.0,1.0,68.0,68.0,68.0,both win; HP only
+deck05,group01,80,1.0,1.0,1.0,72.0,72.0,72.0,both win; HP only
+deck05,group02,80,1.0,1.0,1.0,45.3,50.0,50.0,both win; HP only
+deck05,group03,80,1.0,1.0,1.0,24.0,24.0,24.0,both win; HP only
+deck05,group04,80,1.0,1.0,1.0,48.0,48.0,48.0,both win; HP only
+deck05,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck05,group06,80,1.0,1.0,1.0,80.0,80.0,80.0,both win; HP only
+deck05,group07,80,0.467,0.633,0.633,3.2,3.1,3.1,informative
+deck06,group00,80,1.0,1.0,1.0,77.2,80.0,80.0,both win; HP only
+deck06,group000,80,1.0,1.0,1.0,76.8,79.2,78.4,both win; HP only
+deck06,group01,80,1.0,1.0,1.0,64.1,76.6,76.0,both win; HP only
+deck06,group02,80,1.0,1.0,1.0,54.5,74.6,74.6,both win; HP only
+deck06,group03,80,0.9,1.0,1.0,29.3,59.3,61.9,both win; HP only
+deck06,group04,80,0.5,1.0,1.0,13.3,63.4,60.1,both win; HP only
+deck06,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck06,group06,80,0.967,1.0,1.0,43.6,71.9,70.8,both win; HP only
+deck06,group07,80,0.2,0.933,0.933,1.5,33.0,35.3,informative
+deck07,group00,80,1.0,1.0,1.0,61.8,78.7,77.8,both win; HP only
+deck07,group000,80,1.0,1.0,1.0,66.2,78.1,77.8,both win; HP only
+deck07,group01,80,1.0,1.0,1.0,59.8,71.1,70.2,both win; HP only
+deck07,group02,80,1.0,1.0,1.0,45.0,63.7,61.6,both win; HP only
+deck07,group03,80,0.933,1.0,1.0,29.5,47.0,46.4,both win; HP only
+deck07,group04,80,0.933,1.0,1.0,21.8,47.5,44.9,both win; HP only
+deck07,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,no wins either
+deck07,group06,80,0.967,1.0,1.0,41.2,62.2,62.2,both win; HP only
+deck07,group07,80,0.067,0.767,0.8,0.3,12.1,11.6,informative
