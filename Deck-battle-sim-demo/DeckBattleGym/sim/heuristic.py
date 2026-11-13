@@ -1,6 +1,6 @@
 from DeckBattleGym.envs.effectcalculator import EffectCalculator
 from DeckBattleGym.envs.enemy import AttackIntent, BlockIntent
-from DeckBattleGym.envs.card import AttackEffect, BlockEffect
+from DeckBattleGym.envs.card import AttackEffect, BlockEffect, EnergyEffect
 
 END = ("end",)
 KILL_BONUS = 8.0
@@ -43,6 +43,9 @@ def heuristic_action(s):
     def score(action):
         card = s.hand[action[1]]
         val = card_score(card, need, atk=attack_value(s, card, action[2]))
+        # if we have an x card we want as much energy as possible 
+        if any(isinstance(e, EnergyEffect) for e in card.effects) and any(c.cost == "x" for c in s.hand):
+            val += 5.0
         if action[2] is not None:
             val += 1.0 / (1 + s.enemies[action[2]].hp)
         # break ties 

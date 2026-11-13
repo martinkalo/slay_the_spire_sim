@@ -10,8 +10,8 @@ from DeckBattleGym.envs.loader import load_card_pool, load_deck_by_id, load_enem
 from DeckBattleGym.sim.mcts import play_battle
 from DeckBattleGym.sim.heuristic import heuristic_action
 
-DECK_ID, GROUP_ID = "deck07", "group05"     
-N, ITERS = 10, 100                       
+DECK_ID, GROUP_ID = "deck06", "group07"     
+N, ITERS = 3, 1500                       
 
 base = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 card_pool = load_card_pool()
@@ -48,3 +48,4 @@ if __name__ == "__main__":
     summarize("random", run_strategy(RandomStrategy))
     summarize("mcts (random rollouts)", run_mcts())
     summarize("mcts (heuristic)", run_mcts(rollout_policy=heuristic_action))
+    summarize("mcts 2 deep(heuristic)", run_mcts(rollout_policy=heuristic_action, max_tree_turns=2))

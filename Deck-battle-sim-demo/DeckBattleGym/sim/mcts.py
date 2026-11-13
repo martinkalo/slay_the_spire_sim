@@ -13,13 +13,14 @@ class Node:
         self.value = 0.0 
 
 class MCTS:
-    def __init__(self, iterations=300, c=1.0, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None):
+    def __init__(self, iterations=300, c=1.0, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1):
         self.iterations = iterations
         self.c = c 
         self.max_rollout_turns = max_rollout_turns
         self.max_rollout_steps = max_rollout_steps
         self.rng = random.Random(seed)
         self.rollout_policy = rollout_policy
+        self.max_tree_turns = max_tree_turns
 
     @staticmethod
     def action_map(s):
@@ -71,6 +72,7 @@ class MCTS:
     def iterate(self, root, root_state):
         # don't do this on the actual state 
         s = root_state.clone()
+        start_turn = s.turn
         s.rng = random.Random(self.rng.getrandbits(32))
         # make sure the agent does not know the sequence of cards in the actual deck 
         s.rng.shuffle(s.deck)
@@ -92,7 +94,7 @@ class MCTS:
             s.apply(actions[k])
             node = node.children[k]
             path.append(node)
-            if k == END:
+            if k == END and s.turn - start_turn >= self.max_tree_turns:
                 break
 
         # calculate the benefit of being at this state 
@@ -109,6 +111,7 @@ class MCTS:
         # for the number of iterations loop through and see the best path taken
         for i in range(self.iterations):
             self.iterate(root, battle)
+        self.last_root = root 
         best = max(root.children, key=lambda k: root.children[k].visits)
         return actions[best]
 
