@@ -16,7 +16,7 @@ class Battle:
                 draw_per_turn:int=5, hand_limit:int=10,
                 card_pool=None,
                 victory_condition=None, 
-                if_battle_log=False, seed=0, record_actions=True):
+                if_battle_log=True, seed=0, record_actions=False):
         self.player = player
         self.enemies = enemies
         self.deck = deck
@@ -310,10 +310,8 @@ class Battle:
 
     def check_victory(self):
         if self.victory_condition.is_victory(self.player, self.enemies, self.turn):
-            if self.if_battle_log:
-                self.log.append("[Battle] You win!")
-            else:
-                self.simulation_log["win"]=True
+            self.log.append("[Battle] You win!")
+            self.simulation_log["win"]=True
             return True
         if self.victory_condition.is_defeat(self.player, self.enemies, self.turn):
             if self.if_battle_log:

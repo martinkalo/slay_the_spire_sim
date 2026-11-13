@@ -30,7 +30,7 @@ def card_score(card, need_block, atk=None):
         atk = sum(e.amount for e in card.effects if isinstance(e, AttackEffect))
     blk = sum(e.amount for e in card.effects if isinstance(e, BlockEffect))
     other = sum(1 for e in card.effects if not isinstance(e, (AttackEffect, BlockEffect)))
-    score = atk + (blk if need_block > 0 else 0.2 * blk) + 3 * other
+    score = atk + (blk if need_block > 0 else 0.2 * blk) + 6 * other
     cost = card.cost if isinstance(card.cost, (int, float)) else 1
     return score / max(cost, 1)
 

@@ -13,7 +13,7 @@ class Node:
         self.value = 0.0 
 
 class MCTS:
-    def __init__(self, iterations=300, c=0.7, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None):
+    def __init__(self, iterations=300, c=1.0, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None):
         self.iterations = iterations
         self.c = c 
         self.max_rollout_turns = max_rollout_turns
@@ -118,4 +118,4 @@ def play_battle(battle, iterations=300, seed=0, **kw):
     while not battle.is_terminal():
         battle.apply(mcts.search(battle))
     win, hp_percent = battle.result()
-    return {"win": win, "final_hp": battle.player.hp, "turns": battle.turn}
+    return {"win": win, "final_hp": battle.player.hp, "turns": battle.turn, "battle log": battle.log}
