@@ -15,11 +15,12 @@ from DeckBattleGym.sim.heuristic import heuristic_action
 DECKS = None                 
 GROUPS = None               
 START_HPS = [80]             
-SEEDS = range(30)
+SEEDS = range(5)
 ITERS = 500
 STRATS = ["random", "mcts_rand", "mcts_heur"]
 BASELINE, CHALLENGER = "mcts_rand", "mcts_heur"     
 OUT_CSV = "experiment_results.csv"
+c_value = 1.0
 
 STRATEGIES = {                
     "random":          ("run",  RandomStrategy,    {}),
@@ -62,11 +63,12 @@ def run_task(task):
         win, final_hp, turns = b.simulation_log["win"], b.player.hp, b.turn
     else:
         b = make(deck_id, group_id, hp, seed, RandomStrategy())
-        r = play_battle(b, iterations=ITERS, seed=seed, **kw)
+        r = play_battle(b, iterations=ITERS, c=c_value, seed=seed, **kw)
         win, final_hp, turns = r["win"], r["final_hp"], r["turns"]
     return {"deck": deck_id, "group": group_id, "hp": hp, "strategy": strat, "seed": seed,
             "win": int(win), "final_hp": max(0, final_hp), "turns": turns,
-            "secs": round(time.time() - t0, 2)}
+            "secs": round(time.time() - t0, 2),
+            "c-value": c_value}
 
 
 def se(xs):
@@ -94,13 +96,13 @@ def summarize(rows):
             print(f"  paired {CHALLENGER} - {BASELINE}: {m:+.1f} HP +/- {e:.1f}  ({verdict})")
 
 
-def main():
+def main(c=1.0):
     decks = DECKS or list(json.load(open(DECK_PATH, encoding="utf-8")).keys())
     groups = GROUPS or list(json.load(open(GROUP_PATH, encoding="utf-8")).keys())
     tasks = [(d, g, hp, st, sd) for d in decks for g in groups
              for hp in START_HPS for st in STRATS for sd in SEEDS]
     print(f"{len(tasks)} battles on {max(1, cpu_count() - 1)} workers", flush=True)
-
+    global c_value; c_value = c
     rows = []
     with Pool(max(1, cpu_count() - 1)) as p:
         for i, row in enumerate(p.imap_unordered(run_task, tasks, chunksize=1), 1):

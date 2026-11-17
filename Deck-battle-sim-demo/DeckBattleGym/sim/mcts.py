@@ -40,6 +40,7 @@ class MCTS:
             return float("inf")
         return (child.value / child.visits + self.c * math.sqrt(math.log(parent.visits + 1) / child.visits))
 
+    # maybe edit here for enemy damage tiers
     @staticmethod
     def evaluate(s):
         # give a numeric score for this state in the game to indicate how good the agent is playing 
@@ -115,9 +116,9 @@ class MCTS:
         best = max(root.children, key=lambda k: root.children[k].visits)
         return actions[best]
 
-def play_battle(battle, iterations=300, seed=0, **kw):
+def play_battle(battle, iterations=300, c=1.0, seed=0, **kw):
     battle.start()
-    mcts = MCTS(iterations=iterations, seed=seed, **kw)
+    mcts = MCTS(iterations=iterations, c=c, seed=seed, **kw)
     while not battle.is_terminal():
         battle.apply(mcts.search(battle))
     win, hp_percent = battle.result()
