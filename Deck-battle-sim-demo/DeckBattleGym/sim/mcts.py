@@ -13,7 +13,7 @@ class Node:
         self.value = 0.0 
 
 class MCTS:
-    def __init__(self, iterations=300, c=1.0, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1):
+    def __init__(self, iterations=300, c=1.2, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1, value_fn=None, value_mix=1.0):
         self.iterations = iterations
         self.c = c 
         self.max_rollout_turns = max_rollout_turns
@@ -21,6 +21,8 @@ class MCTS:
         self.rng = random.Random(seed)
         self.rollout_policy = rollout_policy
         self.max_tree_turns = max_tree_turns
+        self.value_fn = value_fn
+        self.value_mix = value_mix
 
     @staticmethod
     def action_map(s):
@@ -98,7 +100,15 @@ class MCTS:
                 break
 
         # calculate the benefit of being at this state 
-        reward = self.rollout(s)
+        if s.is_terminal():
+            reward = self.evaluate(s)
+        elif self.value_fn is not None:
+            v = self.value_fn(s)
+            if self.value_mix < 1.0:
+                v = self.value_mix * v + (1 - self.value_mix) * self.rollout(s)
+            reward = v
+        else:
+            reward = self.rollout(s)
         for node in path:
             node.visits += 1 
             node.value += reward

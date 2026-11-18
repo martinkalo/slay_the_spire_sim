@@ -10,8 +10,8 @@ from DeckBattleGym.envs.loader import load_card_pool, load_deck_by_id, load_enem
 from DeckBattleGym.sim.mcts import play_battle
 from DeckBattleGym.sim.heuristic import heuristic_action
 
-DECK_ID, GROUP_ID = "deck06", "group07"     
-N, ITERS = 3, 1500                       
+DECK_ID, GROUP_ID = "deck07", "group07"     
+N, ITERS = 3, 400                       
 
 base = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 card_pool = load_card_pool()

@@ -1,6 +1,7 @@
 import sys, os, json, csv, math, time, statistics
 from copy import deepcopy
 from functools import lru_cache
+from DeckBattleGym.sim.encode import ValueFn
 from multiprocessing import Pool, cpu_count
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
@@ -11,14 +12,15 @@ from DeckBattleGym.envs.player_strategy import RandomStrategy
 from DeckBattleGym.envs.loader import load_card_pool, load_deck_by_id, load_enemy_group
 from DeckBattleGym.sim.mcts import play_battle
 from DeckBattleGym.sim.heuristic import heuristic_action
+from DeckBattleGym.sim.encode import ValueFn
 
 DECKS = None                 
 GROUPS = None               
 START_HPS = [80]             
 SEEDS = range(30)
 ITERS = 500
-STRATS = ["random", "mcts_rand", "mcts_heur"]
-BASELINE, CHALLENGER = "mcts_rand", "mcts_heur"     
+STRATS = ["random", "mcts_rand", "mcts_heur", "mcts_value"]
+BASELINE, CHALLENGER = "mcts_heur", "mcts_value"     
 OUT_CSV = "experiment_results.csv"
 
 STRATEGIES = {                
@@ -45,6 +47,12 @@ def get_deck(deck_id):
 def get_enemies(group_id):
     return load_enemy_group(GROUP_PATH, group_id)[0]
 
+@lru_cache(maxsize=None)
+def get_value_fn(path):
+    return ValueFn(path)
+
+STRATEGIES["mcts_value"] = ("mcts", None, {"value_path": os.path.join(BASE, "value_net.npz")})
+
 
 def make(deck_id, group_id, hp, seed, strategy):
     return Battle(Player("Hero", hp=hp, energy=3, strategy=strategy),
@@ -61,6 +69,9 @@ def run_task(task):
         b.run()
         win, final_hp, turns = b.simulation_log["win"], b.player.hp, b.turn
     else:
+        kw = dict(kw)                                              
+        if "value_path" in kw:                                     
+            kw["value_fn"] = get_value_fn(kw.pop("value_path")) 
         b = make(deck_id, group_id, hp, seed, RandomStrategy())
         r = play_battle(b, iterations=ITERS, seed=seed, **kw)
         win, final_hp, turns = r["win"], r["final_hp"], r["turns"]
