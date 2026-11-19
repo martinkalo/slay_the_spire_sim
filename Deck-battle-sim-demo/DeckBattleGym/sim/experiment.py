@@ -1,7 +1,6 @@
 import sys, os, json, csv, math, time, statistics
 from copy import deepcopy
 from functools import lru_cache
-from DeckBattleGym.sim.encode import ValueFn
 from multiprocessing import Pool, cpu_count
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
@@ -19,7 +18,7 @@ GROUPS = None
 START_HPS = [80]             
 SEEDS = range(30)
 ITERS = 500
-STRATS = ["random", "mcts_rand", "mcts_heur", "mcts_value"]
+STRATS = ["mcts_heur", "mcts_value_pw0.0", "mcts_value_pw0.05", "mcts_value_pw0.1", "mcts_value_mix"]
 BASELINE, CHALLENGER = "mcts_heur", "mcts_value"     
 OUT_CSV = "experiment_results.csv"
 
@@ -33,6 +32,13 @@ STRATEGIES = {
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DECK_PATH = os.path.join(BASE, "data", "deck.json")
 GROUP_PATH = os.path.join(BASE, "data", "enemy_group.json")
+
+VPATH = os.path.join(BASE, "value_net.npz")
+for pw in (0.0, 0.05, 0.1):
+    STRATEGIES[f"mcts_value_pw{pw}"] = ("mcts", None,
+        {"value_path": VPATH, "c": 0.3, "progress_weight": pw})
+STRATEGIES["mcts_value_mix"] = ("mcts", None,
+    {"value_path": VPATH, "c": 0.3, "progress_weight": 0.05, "value_mix": 0.5, "rollout_policy": heuristic_action})
 
 
 @lru_cache(maxsize=None)
@@ -50,8 +56,6 @@ def get_enemies(group_id):
 @lru_cache(maxsize=None)
 def get_value_fn(path):
     return ValueFn(path)
-
-STRATEGIES["mcts_value"] = ("mcts", None, {"value_path": os.path.join(BASE, "value_net.npz")})
 
 
 def make(deck_id, group_id, hp, seed, strategy):
@@ -93,16 +97,24 @@ def summarize(rows):
         for strat, bys in by_strat.items():
             rs = list(bys.values())
             hps = [r["final_hp"] for r in rs]
-            print(f"  {strat:18s} win {sum(r['win'] for r in rs) / len(rs):4.0%}  "
+            capped = sum(1 for r in rs if r["turns"] > 60)
+            print(f"  {strat:20s} win {sum(r['win'] for r in rs) / len(rs):4.0%}  "
                   f"HP {statistics.mean(hps):5.1f} +/- {se(hps):4.1f}  "
                   f"turns {statistics.mean(r['turns'] for r in rs):4.1f}  "
-                  f"secs/battle {statistics.mean(r['secs'] for r in rs):5.2f}")
-        a, b = by_strat.get(BASELINE), by_strat.get(CHALLENGER)
-        if a and b:
-            diffs = [b[s]["final_hp"] - a[s]["final_hp"] for s in a if s in b]
-            m, e = statistics.mean(diffs), se(diffs)
-            verdict = "real difference" if abs(m) > 2 * e else "within noise"
-            print(f"  paired {CHALLENGER} - {BASELINE}: {m:+.1f} HP +/- {e:.1f}  ({verdict})")
+                  f"capped {capped}  secs/battle {statistics.mean(r['secs'] for r in rs):5.2f}")
+        a = by_strat.get(BASELINE)
+        for name, b in by_strat.items():
+            if not a or name == BASELINE:
+                continue
+            common = [s for s in a if s in b]
+            if not common:
+                continue
+            dh = [b[s]["final_hp"] - a[s]["final_hp"] for s in common]
+            dw = [b[s]["win"] - a[s]["win"] for s in common]
+            m, e = statistics.mean(dh), se(dh)
+            verdict = "real" if abs(m) > 2 * e else "noise"
+            print(f"  {name} - {BASELINE}: HP {m:+.1f} +/- {e:.1f} ({verdict}), "
+                  f"wins {statistics.mean(dw):+.0%}")
 
 
 def main():
@@ -110,6 +122,7 @@ def main():
     groups = GROUPS or list(json.load(open(GROUP_PATH, encoding="utf-8")).keys())
     tasks = [(d, g, hp, st, sd) for d in decks for g in groups
              for hp in START_HPS for st in STRATS for sd in SEEDS]
+    print(sorted({t[:4] for t in tasks[2590:2680]}))
     print(f"{len(tasks)} battles on {max(1, cpu_count() - 1)} workers", flush=True)
 
     rows = []

@@ -16,7 +16,7 @@ class Battle:
                 draw_per_turn:int=5, hand_limit:int=10,
                 card_pool=None,
                 victory_condition=None, 
-                if_battle_log=False, seed=0, record_actions=False):
+                if_battle_log=False, seed=0, record_actions=False, max_turns=60, max_plays_per_turn=150):
         self.player = player
         self.enemies = enemies
         self.deck = deck
@@ -41,6 +41,9 @@ class Battle:
         self.running_log = None
         self._card_templates = {}
         self.record_actions = record_actions
+        self.max_turns = max_turns
+        self.max_plays_per_turn = max_plays_per_turn
+        self.plays_this_turn = 0
     
     def _get_battle_count(self):
         counter = 1
@@ -100,6 +103,7 @@ class Battle:
         return copy.copy(tmpl) 
     
     def play_card(self, card, user, targets=None):
+        self.plays_this_turn += 1
         if not isinstance(targets, list):
             targets = [targets]
         if self.if_battle_log:
@@ -146,6 +150,7 @@ class Battle:
 
     def _begin_player_turn(self):
         self.turn += 1
+        self.plays_this_turn = 0
         if self.if_battle_log:
             self.log.append(f"\n--- Turn {self.turn} ---")
         self.player.begin_turn(self)
@@ -154,6 +159,8 @@ class Battle:
             self.running_log = {"turn": self.turn, "hand": [c.id for c in self.hand], "actions": []}
 
     def legal_actions(self):
+        if self.plays_this_turn >= self.max_plays_per_turn:
+            return [("end",)]
         p = self.player
         acts, seen = [("end",)], set()
         alive = [j for j, e in enumerate(self.enemies) if e.hp > 0]
@@ -212,7 +219,9 @@ class Battle:
 
     def is_terminal(self):
         vc = self.victory_condition
-        return (vc.is_victory(self.player, self.enemies, self.turn) or vc.is_defeat(self.player, self.enemies, self.turn))
+        return (vc.is_victory(self.player, self.enemies, self.turn)
+                or vc.is_defeat(self.player, self.enemies, self.turn)
+                or self.turn > self.max_turns)
 
     def result(self):
         """(win, hp_fraction) for the reward function."""
