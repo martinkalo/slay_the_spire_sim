@@ -33,21 +33,20 @@ def card_score(card, need_block, atk=None):
     blk = sum(e.amount for e in card.effects if isinstance(e, BlockEffect))
     # take into consideration if the card has the strength buff
     str = sum(e.value for e in card.effects if isinstance(e, BuffEffect) and (e.name == "Strength"))
+    atk += str
     # double strength, count how many
     db_str = sum(1 for e in card.effects if isinstance(e, DoubleStrengthEffect))
+    atk += (str * 2 * db_str)
     # double block, count how many
     db_blk = sum(1 for e in card.effects if isinstance(e, DoubleBlockEffect))
+    blk += (blk * 2 * db_blk)
     # hp effect
     hp_efct = sum(e.amount for e in card.effects if isinstance(e, HPEffect))
-
+    blk += hp_efct
     # energy effect?
     egy = sum(e.amount for e in card.effects if isinstance(e, EnergyEffect))
     # draw effect 
     draw = sum(e.amount for e in card.effects if isinstance(e, DrawEffect))
-
-    # exhaust by type (need to know how many of other type there are in hand for it to be useful)
-    # to exhaust, we need to know how many types of cards that we should exhaust 
-    # exhst = None
 
     # generate card (so far, this is only a negative thing?)
     gen = sum(e.amount for e in card.effects if isinstance(e, GenerateCardEffect))
@@ -55,16 +54,18 @@ def card_score(card, need_block, atk=None):
 
     # vulnerable debuff?
     vul = sum(e.duration for e in card.effects if isinstance(e, DebuffEffect) and (e.name == "Vulnerable"))
+    atk *= (1.5 * vul)
     # weak
     weak = sum(e.duration for e in card.effects if isinstance(e, DebuffEffect) and (e.name == "Weak"))
+    atk *= (weak *.75)
     # lose strength
     lose_str = sum(e.value for e in card.effects if isinstance(e, DebuffEffect) and (e.name == "LoseStrength"))
     # no draw
     no_draw = sum(e.duration for e in card.effects if isinstance(e, DebuffEffect) and (e.name == "NoDraw"))
-    effects = str * 2 + db_str + (db_blk * 2 if need_block > 0 else .75*blk) + (.5 * atk * vul) + (weak * blk * .75) + (hp_efct/2) + egy*.75 - (gen * .25) + (draw*.25) - (lose_str*.10) - (no_draw*.3)
-    # other = sum(1 for e in card.effects if not isinstance(e, (AttackEffect, BlockEffect, HPEffect, DoubleStrengthEffect, DoubleBlockEffect, EnergyEffect, DrawEffect, GenerateCardEffect, BuffEffect, DebuffEffect)))
-    other = sum(1 for e in card.effects if not isinstance(e, (AttackEffect, BlockEffect)))
-    score = atk + (blk if need_block > 0 else 0.2 * blk) + 6 * other
+    effects = egy*2 - (gen) + (draw) + (lose_str) + (no_draw)
+    #other = sum(1 for e in card.effects if not isinstance(e, (AttackEffect, BlockEffect, HPEffect, DoubleStrengthEffect, DoubleBlockEffect, EnergyEffect, DrawEffect, GenerateCardEffect, BuffEffect, DebuffEffect)))
+    other = sum(1 for e in card.effects if not isinstance(e, (AttackEffect, BlockEffect, BuffEffect, DoubleBlockEffect, DoubleStrengthEffect)))
+    score = atk + (blk if need_block > 0 else 0.9 * blk) + 10 * other
     cost = card.cost if isinstance(card.cost, (int, float)) else 1
     return score / max(cost, 1)
 
@@ -85,21 +86,22 @@ def heuristic_action(s):
         # break ties 
         return val + s.rng.random() * 0.01
     return max(plays, key=score)
+
 """
 # if there is only 1 enemy left...
-        if sum(e.hp > 0 for e in s.enemies) == 1:
-            return
+    if sum(e.hp > 0 for e in s.enemies) == 1:
+        return
 
-        # otherwise, if we are about to die...
-        elif hp_percent <= .15:
-            return
+    # otherwise, if we are about to die...
+    elif hp_percent <= .15:
+        return
 
-        # then it's whether or not an enemy is going to die? what percent is this?
-        # then we need to see if our card combo can kill it 
-        e_hps = [e.hp for e in s.enemies]
-        e_maxs = [e.max_hp for e in s.enemies]
-        hp_paired = zip((e_hps, e_maxs) for hps, maxs in zip(e_hps, e_maxs) if hps > 0)
-        min_hp = min(hp_paired, key=lambda x: x[0])
+    # then it's whether or not an enemy is going to die? what percent is this?
+    # then we need to see if our card combo can kill it 
+    e_hps = [e.hp for e in s.enemies]
+    e_maxs = [e.max_hp for e in s.enemies]
+    hp_paired = zip((e_hps, e_maxs) for hps, maxs in zip(e_hps, e_maxs) if hps > 0)
+    min_hp = min(hp_paired, key=lambda x: x[0])
 	elif  min_hp[0]/min_hp[1] < .15:
             return
 

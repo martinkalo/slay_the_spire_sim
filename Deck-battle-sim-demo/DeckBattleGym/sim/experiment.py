@@ -4,6 +4,7 @@ from functools import lru_cache
 from multiprocessing import Pool, cpu_count
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
+c_value = float(sys.argv[1]) if len(sys.argv) > 1 else 1.5
 
 from DeckBattleGym.envs.battle import Battle
 from DeckBattleGym.envs.player import Player
@@ -15,12 +16,11 @@ from DeckBattleGym.sim.heuristic import heuristic_action
 DECKS = None                 
 GROUPS = None               
 START_HPS = [80]             
-SEEDS = range(5)
+SEEDS = range(20)
 ITERS = 500
 STRATS = ["random", "mcts_rand", "mcts_heur"]
 BASELINE, CHALLENGER = "mcts_rand", "mcts_heur"     
 OUT_CSV = "experiment_results.csv"
-c_value = 1.0
 
 STRATEGIES = {                
     "random":          ("run",  RandomStrategy,    {}),
@@ -87,7 +87,8 @@ def summarize(rows):
             print(f"  {strat:18s} win {sum(r['win'] for r in rs) / len(rs):4.0%}  "
                   f"HP {statistics.mean(hps):5.1f} +/- {se(hps):4.1f}  "
                   f"turns {statistics.mean(r['turns'] for r in rs):4.1f}  "
-                  f"secs/battle {statistics.mean(r['secs'] for r in rs):5.2f}")
+                  f"secs/battle {statistics.mean(r['secs'] for r in rs):5.2f}  "
+                  f"c value {c_value}")
         a, b = by_strat.get(BASELINE), by_strat.get(CHALLENGER)
         if a and b:
             diffs = [b[s]["final_hp"] - a[s]["final_hp"] for s in a if s in b]
@@ -96,13 +97,13 @@ def summarize(rows):
             print(f"  paired {CHALLENGER} - {BASELINE}: {m:+.1f} HP +/- {e:.1f}  ({verdict})")
 
 
-def main(c=1.0):
+def main():
+    print(f"e{c_value}")
     decks = DECKS or list(json.load(open(DECK_PATH, encoding="utf-8")).keys())
     groups = GROUPS or list(json.load(open(GROUP_PATH, encoding="utf-8")).keys())
     tasks = [(d, g, hp, st, sd) for d in decks for g in groups
              for hp in START_HPS for st in STRATS for sd in SEEDS]
     print(f"{len(tasks)} battles on {max(1, cpu_count() - 1)} workers", flush=True)
-    global c_value; c_value = c
     rows = []
     with Pool(max(1, cpu_count() - 1)) as p:
         for i, row in enumerate(p.imap_unordered(run_task, tasks, chunksize=1), 1):

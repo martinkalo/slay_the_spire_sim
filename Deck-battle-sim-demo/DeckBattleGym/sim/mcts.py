@@ -13,7 +13,7 @@ class Node:
         self.value = 0.0 
 
 class MCTS:
-    def __init__(self, iterations=300, c=1.0, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1):
+    def __init__(self, iterations=300, c=1.5, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1):
         self.iterations = iterations
         self.c = c 
         self.max_rollout_turns = max_rollout_turns
@@ -116,7 +116,7 @@ class MCTS:
         best = max(root.children, key=lambda k: root.children[k].visits)
         return actions[best]
 
-def play_battle(battle, iterations=300, c=1.0, seed=0, **kw):
+def play_battle(battle, iterations=300, c=1.5, seed=0, **kw):
     battle.start()
     mcts = MCTS(iterations=iterations, c=c, seed=seed, **kw)
     while not battle.is_terminal():

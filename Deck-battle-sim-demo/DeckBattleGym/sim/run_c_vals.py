@@ -1,7 +1,17 @@
 import subprocess
-from experiment import main as e_main
-from analyze import main as a_main
+import csv, os
 
-c_vals = [0.5, 0.75, 1.0, 1.41, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+ALL_OUT = "all_c_experiments.csv"
+OUT_CSV = "experiment_results.csv"
+BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+c_vals = [1.2, 1.5, 1.7, 1.75]
 for c in c_vals:
-    e_main(c=c)
+    subprocess.run(["python", r"Deck-battle-sim-demo\DeckBattleGym\sim\experiment.py", f"{c}"])
+    with open(os.path.join(BASE, ALL_OUT), "a", newline="") as outfile, \
+        open(os.path.join(BASE, OUT_CSV), "r", newline="") as infile:
+        reader = csv.reader(infile)
+        writer = csv.writer(outfile)
+        for row in reader:
+            writer.writerow(row)
+    subprocess.run(["python", r"Deck-battle-sim-demo\DeckBattleGym\sim\analyze.py", f"{c}"])
