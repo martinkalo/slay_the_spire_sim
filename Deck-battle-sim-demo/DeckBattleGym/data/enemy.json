@@ -4,7 +4,7 @@
         "name":"Dummy",
         "hp":100,
         "intent_sq":[
-            {"type":"block", "value":0}
+            [{"type":"block", "value":0}]
         ],
         "die_after_turn": 10
     },
