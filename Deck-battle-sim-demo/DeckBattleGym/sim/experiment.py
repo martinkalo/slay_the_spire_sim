@@ -8,7 +8,7 @@ c_value = float(sys.argv[1]) if len(sys.argv) > 1 else 1.5
 
 from DeckBattleGym.envs.battle import Battle
 from DeckBattleGym.envs.player import Player
-from DeckBattleGym.envs.player_strategy import RandomStrategy
+from DeckBattleGym.envs.player_strategy import RandomStrategy, SimpleStrategy
 from DeckBattleGym.envs.loader import load_card_pool, load_deck_by_id, load_enemy_group
 from DeckBattleGym.sim.mcts import play_battle
 from DeckBattleGym.sim.heuristic import heuristic_action
@@ -18,12 +18,13 @@ GROUPS = None
 START_HPS = [80]             
 SEEDS = range(20)
 ITERS = 500
-STRATS = ["random", "mcts_rand", "mcts_heur"]
+STRATS = ["random", "naive", "mcts_rand", "mcts_heur"]
 BASELINE, CHALLENGER = "mcts_rand", "mcts_heur"     
 OUT_CSV = "experiment_results.csv"
 
 STRATEGIES = {                
     "random":          ("run",  RandomStrategy,    {}),
+    "naive":           ("run", SimpleStrategy, {}),
     "mcts_rand":       ("mcts", None, {}),
     "mcts_heur":       ("mcts", None, {"rollout_policy": heuristic_action}),
     "mcts_heur_2deep": ("mcts", None, {"rollout_policy": heuristic_action, "max_tree_turns": 2}),
