@@ -12,6 +12,7 @@ from DeckBattleGym.envs.player_strategy import RandomStrategy, SimpleStrategy
 from DeckBattleGym.envs.loader import load_card_pool, load_deck_by_id, load_enemy_group
 from DeckBattleGym.sim.mcts import play_battle
 from DeckBattleGym.sim.heuristic import heuristic_action
+from DeckBattleGym.sim.encode import ValueFn
 
 DECKS = None                 
 GROUPS = None               
@@ -34,6 +35,13 @@ BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DECK_PATH = os.path.join(BASE, "data", "deck.json")
 GROUP_PATH = os.path.join(BASE, "data", "enemy_group.json")
 
+VPATH = os.path.join(BASE, "value_net.npz")
+for pw in (0.0, 0.05, 0.1):
+    STRATEGIES[f"mcts_value_pw{pw}"] = ("mcts", None,
+        {"value_path": VPATH, "c": 0.3, "progress_weight": pw})
+STRATEGIES["mcts_value_mix"] = ("mcts", None,
+    {"value_path": VPATH, "c": 0.3, "progress_weight": 0.05, "value_mix": 0.5, "rollout_policy": heuristic_action})
+
 
 @lru_cache(maxsize=None)
 def pool():
@@ -46,6 +54,10 @@ def get_deck(deck_id):
 @lru_cache(maxsize=None)
 def get_enemies(group_id):
     return load_enemy_group(GROUP_PATH, group_id)[0]
+
+@lru_cache(maxsize=None)
+def get_value_fn(path):
+    return ValueFn(path)
 
 
 def make(deck_id, group_id, hp, seed, strategy):
@@ -63,6 +75,9 @@ def run_task(task):
         b.run()
         win, final_hp, turns = b.simulation_log["win"], b.player.hp, b.turn
     else:
+        kw = dict(kw)                                              
+        if "value_path" in kw:                                     
+            kw["value_fn"] = get_value_fn(kw.pop("value_path")) 
         b = make(deck_id, group_id, hp, seed, RandomStrategy())
         r = play_battle(b, iterations=ITERS, c=c_value, seed=seed, **kw)
         win, final_hp, turns = r["win"], r["final_hp"], r["turns"]
@@ -85,7 +100,8 @@ def summarize(rows):
         for strat, bys in by_strat.items():
             rs = list(bys.values())
             hps = [r["final_hp"] for r in rs]
-            print(f"  {strat:18s} win {sum(r['win'] for r in rs) / len(rs):4.0%}  "
+            capped = sum(1 for r in rs if r["turns"] > 60)
+            print(f"  {strat:20s} win {sum(r['win'] for r in rs) / len(rs):4.0%}  "
                   f"HP {statistics.mean(hps):5.1f} +/- {se(hps):4.1f}  "
                   f"turns {statistics.mean(r['turns'] for r in rs):4.1f}  "
                   f"secs/battle {statistics.mean(r['secs'] for r in rs):5.2f}  "
@@ -104,6 +120,7 @@ def main():
     groups = GROUPS or list(json.load(open(GROUP_PATH, encoding="utf-8")).keys())
     tasks = [(d, g, hp, st, sd) for d in decks for g in groups
              for hp in START_HPS for st in STRATS for sd in SEEDS]
+    print(sorted({t[:4] for t in tasks[2590:2680]}))
     print(f"{len(tasks)} battles on {max(1, cpu_count() - 1)} workers", flush=True)
     rows = []
     with Pool(max(1, cpu_count() - 1)) as p:

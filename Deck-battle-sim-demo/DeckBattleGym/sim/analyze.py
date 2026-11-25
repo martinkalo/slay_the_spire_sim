@@ -1,19 +1,27 @@
 import csv, math, statistics, sys, collections
 from pathlib import Path
 
-PATH = Path(r"C:\Users\marti\WPI\Senior Year\CS534\slay_the_spire_sim\Deck-battle-sim-demo\DeckBattleGym\experiment_results.csv")
-# sys.argv[1] if len(sys.argv) > 1 else "experiment_results.csv"
+
+PATH = sys.argv[1] if len(sys.argv) > 1 else "experiment_results.csv"
 c_value = float(sys.argv[1]) if len(sys.argv) > 1 else 1.5
 BASE, CHAL, NAIVE = "mcts_rand", "mcts_heur", "naive"
+CAP = 60                      
+
+
+def mean(xs): return sum(xs) / len(xs) if xs else float("nan")
+def se(xs): return statistics.stdev(xs) / math.sqrt(len(xs)) if len(xs) > 1 else 0.0
+
 
 cells = collections.defaultdict(lambda: collections.defaultdict(dict))
 with open(PATH, newline="") as f:
     for r in csv.DictReader(f):
         cells[(r["deck"], r["group"], r["hp"])][r["strategy"]][int(r["seed"])] = (
-            int(r["win"]), float(r["final_hp"]), float(r["secs"]))
+            int(r["win"]), float(r["final_hp"]), int(r["turns"]), float(r["secs"]))
 
-def mean(xs): return sum(xs) / len(xs) if xs else float("nan")
-def se(xs): return statistics.stdev(xs) / math.sqrt(len(xs)) if len(xs) > 1 else 0.0
+strats = list(dict.fromkeys(s for by in cells.values() for s in by))
+print("strategies in file:", strats)
+if BASE not in strats:
+    sys.exit(f"baseline {BASE} not in the file")
 
 def main():
     print(f"a{c_value}")

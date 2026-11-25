@@ -13,7 +13,7 @@ class Node:
         self.value = 0.0 
 
 class MCTS:
-    def __init__(self, iterations=300, c=1.5, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1):
+    def __init__(self, iterations=300, c=1.5, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1, value_fn=None, value_mix=1.0, progress_weight=0.0):
         self.iterations = iterations
         self.c = c 
         self.max_rollout_turns = max_rollout_turns
@@ -21,6 +21,9 @@ class MCTS:
         self.rng = random.Random(seed)
         self.rollout_policy = rollout_policy
         self.max_tree_turns = max_tree_turns
+        self.value_fn = value_fn
+        self.value_mix = value_mix
+        self.progress_weight = progress_weight
 
     @staticmethod
     def action_map(s):
@@ -99,12 +102,23 @@ class MCTS:
                 break
 
         # calculate the benefit of being at this state 
-        reward = self.rollout(s)
+        if s.is_terminal():
+            reward = self.evaluate(s)
+        elif self.value_fn is not None:
+            v = self.value_fn(s)
+            left = sum(max(0, e.hp) for e in s.enemies)
+            v += self.progress_weight * (self.root_hp - left) / max(self.root_hp, 1)    
+            if self.value_mix < 1.0:
+                v = self.value_mix * v + (1 - self.value_mix) * self.rollout(s)
+            reward = v
+        else:
+            reward = self.rollout(s)
         for node in path:
             node.visits += 1 
             node.value += reward
 
     def search(self, battle):
+        self.root_hp = sum(max(0, e.hp) for e in battle.enemies)
         actions = self.action_map(battle)
         if len(actions) == 1:
             return next(iter(actions.values()))
