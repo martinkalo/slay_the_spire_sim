@@ -13,7 +13,7 @@ class Node:
         self.value = 0.0 
 
 class MCTS:
-    def __init__(self, iterations=300, c=1.2, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1, value_fn=None, value_mix=1.0, progress_weight=0.0):
+    def __init__(self, iterations=300, c=1.5, max_rollout_turns=15, max_rollout_steps=400, seed=0, rollout_policy = None, max_tree_turns=1, value_fn=None, value_mix=1.0, progress_weight=0.0):
         self.iterations = iterations
         self.c = c 
         self.max_rollout_turns = max_rollout_turns
@@ -43,6 +43,7 @@ class MCTS:
             return float("inf")
         return (child.value / child.visits + self.c * math.sqrt(math.log(parent.visits + 1) / child.visits))
 
+    # maybe edit here for enemy damage tiers
     @staticmethod
     def evaluate(s):
         # give a numeric score for this state in the game to indicate how good the agent is playing 
@@ -129,9 +130,9 @@ class MCTS:
         best = max(root.children, key=lambda k: root.children[k].visits)
         return actions[best]
 
-def play_battle(battle, iterations=300, seed=0, **kw):
+def play_battle(battle, iterations=300, c=1.5, seed=0, **kw):
     battle.start()
-    mcts = MCTS(iterations=iterations, seed=seed, **kw)
+    mcts = MCTS(iterations=iterations, c=c, seed=seed, **kw)
     while not battle.is_terminal():
         battle.apply(mcts.search(battle))
     win, hp_percent = battle.result()

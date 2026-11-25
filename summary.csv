@@ -1,0 +1,64 @@
+deck,group,hp,win_random,win_naive,win_mcts_rand,win_mcts_heur,hp_random,hp_naive,hp_mcts_rand,hp_mcts_heur,note,c_value
+deck01,group00,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck01,group000,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck01,group01,80,1.0,1.0,1.0,1.0,53.2,61.0,68.7,71.4,both win; HP only,1.5
+deck01,group02,80,1.0,1.0,1.0,1.0,26.2,30.6,46.7,49.5,both win; HP only,1.5
+deck01,group03,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck01,group04,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck01,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck01,group06,80,0.0,0.1,0.65,0.9,0.0,0.6,6.7,7.6,informative,1.5
+deck01,group07,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck02,group00,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck02,group000,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck02,group01,80,1.0,1.0,1.0,1.0,65.2,69.2,73.8,74.3,both win; HP only,1.5
+deck02,group02,80,1.0,1.0,1.0,1.0,49.7,52.8,66.7,67.1,both win; HP only,1.5
+deck02,group03,80,1.0,0.8,1.0,1.0,26.8,17.9,51.5,47.2,both win; HP only,1.5
+deck02,group04,80,0.05,0.3,1.0,1.0,0.2,3.5,35.0,32.5,both win; HP only,1.5
+deck02,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck02,group06,80,0.75,0.8,1.0,1.0,21.1,22.5,50.4,51.4,both win; HP only,1.5
+deck02,group07,80,0.0,0.0,0.4,0.5,0.0,0.0,5.0,5.0,informative,1.5
+deck03,group00,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck03,group000,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck03,group01,80,1.0,1.0,1.0,1.0,49.9,65.5,73.7,74.7,both win; HP only,1.5
+deck03,group02,80,0.95,1.0,1.0,1.0,42.0,49.7,67.3,66.0,both win; HP only,1.5
+deck03,group03,80,0.1,0.3,1.0,1.0,5.3,17.2,64.1,64.3,both win; HP only,1.5
+deck03,group04,80,0.05,0.3,0.95,0.95,4.0,16.3,47.5,48.6,informative,1.5
+deck03,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck03,group06,80,0.2,0.35,0.85,0.95,4.2,6.7,32.2,32.6,informative,1.5
+deck03,group07,80,0.0,0.0,0.1,0.05,0.0,0.0,2.3,1.6,informative,1.5
+deck04,group00,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck04,group000,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck04,group01,80,1.0,1.0,1.0,1.0,64.5,67.0,77.7,78.2,both win; HP only,1.5
+deck04,group02,80,1.0,1.0,1.0,1.0,54.8,58.0,73.0,75.4,both win; HP only,1.5
+deck04,group03,80,0.5,0.4,1.0,1.0,20.7,11.9,65.6,74.4,both win; HP only,1.5
+deck04,group04,80,0.0,0.15,1.0,1.0,0.0,1.7,53.8,61.0,both win; HP only,1.5
+deck04,group05,80,0.0,0.0,0.6,0.65,0.0,0.0,20.2,26.6,informative,1.5
+deck04,group06,80,0.35,0.55,1.0,1.0,6.7,12.2,51.9,55.8,both win; HP only,1.5
+deck04,group07,80,0.45,0.5,1.0,1.0,9.2,10.6,38.5,44.5,both win; HP only,1.5
+deck05,group00,80,1.0,1.0,1.0,1.0,68.0,68.0,68.0,68.0,both win; HP only,1.5
+deck05,group000,80,1.0,1.0,1.0,1.0,68.0,68.0,68.0,68.0,both win; HP only,1.5
+deck05,group01,80,1.0,1.0,1.0,1.0,72.0,72.0,72.0,72.0,both win; HP only,1.5
+deck05,group02,80,1.0,1.0,1.0,1.0,43.0,44.0,50.0,50.0,both win; HP only,1.5
+deck05,group03,80,1.0,1.0,1.0,1.0,24.0,24.0,24.0,24.0,both win; HP only,1.5
+deck05,group04,80,1.0,1.0,1.0,1.0,48.0,48.0,48.0,48.0,both win; HP only,1.5
+deck05,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck05,group06,80,1.0,1.0,1.0,1.0,80.0,80.0,80.0,80.0,both win; HP only,1.5
+deck05,group07,80,0.45,0.6,0.6,0.6,2.5,3.1,3.1,3.1,informative,1.5
+deck06,group00,80,1.0,1.0,1.0,1.0,77.0,77.3,80.0,80.0,both win; HP only,1.5
+deck06,group000,80,1.0,1.0,1.0,1.0,76.1,75.8,79.6,78.5,both win; HP only,1.5
+deck06,group01,80,1.0,1.0,1.0,1.0,63.4,65.5,75.8,75.8,both win; HP only,1.5
+deck06,group02,80,1.0,1.0,1.0,1.0,54.0,44.5,76.4,74.3,both win; HP only,1.5
+deck06,group03,80,0.95,0.85,1.0,1.0,29.4,19.1,60.2,61.8,both win; HP only,1.5
+deck06,group04,80,0.55,0.45,1.0,1.0,15.3,9.5,63.0,61.6,both win; HP only,1.5
+deck06,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck06,group06,80,0.95,1.0,1.0,1.0,46.5,39.5,69.9,72.8,both win; HP only,1.5
+deck06,group07,80,0.15,0.15,0.95,1.0,0.8,1.2,30.2,37.8,informative,1.5
+deck07,group00,80,1.0,1.0,1.0,1.0,62.4,63.1,78.5,77.7,both win; HP only,1.5
+deck07,group000,80,1.0,1.0,1.0,1.0,66.0,67.0,77.8,78.1,both win; HP only,1.5
+deck07,group01,80,1.0,1.0,1.0,1.0,58.1,60.5,70.5,68.1,both win; HP only,1.5
+deck07,group02,80,1.0,1.0,1.0,1.0,43.1,45.7,63.5,62.8,both win; HP only,1.5
+deck07,group03,80,0.95,1.0,1.0,1.0,30.8,31.4,44.6,45.2,both win; HP only,1.5
+deck07,group04,80,0.9,0.85,1.0,1.0,21.5,24.4,48.8,50.4,both win; HP only,1.5
+deck07,group05,80,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,no wins either,1.5
+deck07,group06,80,0.95,1.0,1.0,1.0,39.5,40.3,60.6,61.0,both win; HP only,1.5
+deck07,group07,80,0.05,0.15,0.7,0.85,0.3,3.6,12.7,16.4,informative,1.5

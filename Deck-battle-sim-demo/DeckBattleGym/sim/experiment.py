@@ -4,10 +4,11 @@ from functools import lru_cache
 from multiprocessing import Pool, cpu_count
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, project_root)
+c_value = float(sys.argv[1]) if len(sys.argv) > 1 else 1.5
 
 from DeckBattleGym.envs.battle import Battle
 from DeckBattleGym.envs.player import Player
-from DeckBattleGym.envs.player_strategy import RandomStrategy
+from DeckBattleGym.envs.player_strategy import RandomStrategy, SimpleStrategy
 from DeckBattleGym.envs.loader import load_card_pool, load_deck_by_id, load_enemy_group
 from DeckBattleGym.sim.mcts import play_battle
 from DeckBattleGym.sim.heuristic import heuristic_action
@@ -16,14 +17,15 @@ from DeckBattleGym.sim.encode import ValueFn
 DECKS = None                 
 GROUPS = None               
 START_HPS = [80]             
-SEEDS = range(30)
+SEEDS = range(20)
 ITERS = 500
-STRATS = ["mcts_heur", "mcts_value_pw0.0", "mcts_value_pw0.05", "mcts_value_pw0.1", "mcts_value_mix"]
-BASELINE, CHALLENGER = "mcts_heur", "mcts_value"     
+STRATS = ["random", "naive", "mcts_rand", "mcts_heur"]
+BASELINE, CHALLENGER = "mcts_rand", "mcts_heur"     
 OUT_CSV = "experiment_results.csv"
 
 STRATEGIES = {                
     "random":          ("run",  RandomStrategy,    {}),
+    "naive":           ("run", SimpleStrategy, {}),
     "mcts_rand":       ("mcts", None, {}),
     "mcts_heur":       ("mcts", None, {"rollout_policy": heuristic_action}),
     "mcts_heur_2deep": ("mcts", None, {"rollout_policy": heuristic_action, "max_tree_turns": 2}),
@@ -77,11 +79,12 @@ def run_task(task):
         if "value_path" in kw:                                     
             kw["value_fn"] = get_value_fn(kw.pop("value_path")) 
         b = make(deck_id, group_id, hp, seed, RandomStrategy())
-        r = play_battle(b, iterations=ITERS, seed=seed, **kw)
+        r = play_battle(b, iterations=ITERS, c=c_value, seed=seed, **kw)
         win, final_hp, turns = r["win"], r["final_hp"], r["turns"]
     return {"deck": deck_id, "group": group_id, "hp": hp, "strategy": strat, "seed": seed,
             "win": int(win), "final_hp": max(0, final_hp), "turns": turns,
-            "secs": round(time.time() - t0, 2)}
+            "secs": round(time.time() - t0, 2),
+            "c-value": c_value}
 
 
 def se(xs):
@@ -101,30 +104,24 @@ def summarize(rows):
             print(f"  {strat:20s} win {sum(r['win'] for r in rs) / len(rs):4.0%}  "
                   f"HP {statistics.mean(hps):5.1f} +/- {se(hps):4.1f}  "
                   f"turns {statistics.mean(r['turns'] for r in rs):4.1f}  "
-                  f"capped {capped}  secs/battle {statistics.mean(r['secs'] for r in rs):5.2f}")
-        a = by_strat.get(BASELINE)
-        for name, b in by_strat.items():
-            if not a or name == BASELINE:
-                continue
-            common = [s for s in a if s in b]
-            if not common:
-                continue
-            dh = [b[s]["final_hp"] - a[s]["final_hp"] for s in common]
-            dw = [b[s]["win"] - a[s]["win"] for s in common]
-            m, e = statistics.mean(dh), se(dh)
-            verdict = "real" if abs(m) > 2 * e else "noise"
-            print(f"  {name} - {BASELINE}: HP {m:+.1f} +/- {e:.1f} ({verdict}), "
-                  f"wins {statistics.mean(dw):+.0%}")
+                  f"secs/battle {statistics.mean(r['secs'] for r in rs):5.2f}  "
+                  f"c value {c_value}")
+        a, b = by_strat.get(BASELINE), by_strat.get(CHALLENGER)
+        if a and b:
+            diffs = [b[s]["final_hp"] - a[s]["final_hp"] for s in a if s in b]
+            m, e = statistics.mean(diffs), se(diffs)
+            verdict = "real difference" if abs(m) > 2 * e else "within noise"
+            print(f"  paired {CHALLENGER} - {BASELINE}: {m:+.1f} HP +/- {e:.1f}  ({verdict})")
 
 
 def main():
+    print(f"e{c_value}")
     decks = DECKS or list(json.load(open(DECK_PATH, encoding="utf-8")).keys())
     groups = GROUPS or list(json.load(open(GROUP_PATH, encoding="utf-8")).keys())
     tasks = [(d, g, hp, st, sd) for d in decks for g in groups
              for hp in START_HPS for st in STRATS for sd in SEEDS]
     print(sorted({t[:4] for t in tasks[2590:2680]}))
     print(f"{len(tasks)} battles on {max(1, cpu_count() - 1)} workers", flush=True)
-
     rows = []
     with Pool(max(1, cpu_count() - 1)) as p:
         for i, row in enumerate(p.imap_unordered(run_task, tasks, chunksize=1), 1):
