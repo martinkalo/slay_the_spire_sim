@@ -1,1 +1,1 @@
-yo
+This is a repository to simulate Slay the Spire and test different strategies for playing the game. This is based off of another base simulator that is found at this GitHub repo: https://github.com/willweiao/Deck-battle-sim-demo
